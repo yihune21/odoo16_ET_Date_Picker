@@ -7,6 +7,7 @@ import {
   onWillStart,
   onMounted,
   useEffect,
+  useRef,
 } from "@odoo/owl";
 import { EthiopianDate } from "./ethiopian_date";
 
@@ -38,7 +39,9 @@ class DateTimeEthiopiaField extends Component {
       currentMonth: 0,
       currentDay: 0,
       selectedDate: null,
+      viewMode: "days",
     });
+    this.inputRef = useRef("input");
 
     onWillStart(async () => {
       this.initializeDate();
@@ -87,8 +90,106 @@ class DateTimeEthiopiaField extends Component {
     this.state.currentMonth = new Date().getMonth();
   };
 
+  onInputChange = (event) => {
+    const inputValue = event.target.value;
+    this.state.inputValue = inputValue;
+
+    // Parse the input to see if it's a valid Ethiopian date
+    const parsedDate = this.parseEthiopianDate(inputValue);
+    if (parsedDate) {
+      const selectedDate = new EthiopianDate(
+        parsedDate.year,
+        parsedDate.month,
+        parsedDate.day
+      );
+      const formattedEthiopianDate = selectedDate.format();
+
+      this.state.currentDay = parsedDate.day;
+      this.state.currentMonth = parsedDate.month - 1; // Adjust because JavaScript months are 0-indexed
+      this.state.currentYear = parsedDate.year;
+      this.state.selectedDate = selectedDate;
+
+      // Update input value with formatted Ethiopian date
+      this.state.inputValue = formattedEthiopianDate;
+
+      // Update props with the formatted Ethiopian date
+      this.props.update(formattedEthiopianDate);
+
+      // Trigger the onchange event with the formatted date if provided
+      if (this.props.onchange) {
+        this.props.onchange(formattedEthiopianDate);
+      }
+    }
+  };
+
+  parseEthiopianDate = (input) => {
+    // Define the Ethiopian date format (DD/MM/YYYY)
+    const datePattern = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+    const match = input.match(datePattern);
+    if (match) {
+      const day = parseInt(match[1], 10);
+      const month = parseInt(match[2], 10);
+      const year = parseInt(match[3], 10);
+
+      // Validate Ethiopian date ranges (Ethiopian calendar uses 1-13 for months, with the 13th month having 5 or 6 days)
+      if (this.isValidEthiopianDate(day, month, year)) {
+        return { day, month, year };
+      }
+    }
+    return null; // Invalid date
+  };
+
+  isValidEthiopianDate = (day, month, year) => {
+    // Ethiopian months are 1-13, with the 13th month having 5 or 6 days (depending on leap year)
+    const maxDaysInMonth =
+      month === 13 ? (this.isEthiopianLeapYear(year) ? 6 : 5) : 30;
+    return (
+      year >= 1 &&
+      month >= 1 &&
+      month <= 13 &&
+      day >= 1 &&
+      day <= maxDaysInMonth
+    );
+  };
+
+  isEthiopianLeapYear = (year) => {
+    // Leap year calculation for the Ethiopian calendar (every 4 years, except for centuries not divisible by 400)
+    return year % 4 === 3; // Ethiopian leap years are one year behind Gregorian leap years
+  };
+
   onInputClick = () => {
     this.state.showCalendar = !this.state.showCalendar;
+    this.state.viewMode = "days"; // Reset view mode to days when opening the calendar
+  };
+
+  onCalendarHeaderClick = () => {
+    if (this.state.viewMode === "days") {
+      this.state.viewMode = "months"; // Switch to months view
+    } else if (this.state.viewMode === "months") {
+      this.state.viewMode = "years"; // Switch to years view
+    }
+  };
+
+  onMonthSelect = (month) => {
+    this.state.currentMonth = this.ETHIOPIAN_MONTHS.indexOf(month);
+    this.state.viewMode = "days"; // Switch back to days view after month selection
+  };
+
+  onYearSelect = (year) => {
+    this.state.currentYear = year;
+    this.state.viewMode = "months"; // Switch back to months view after year selection
+  };
+
+  getAvailableYears = () => {
+    const years = [];
+    for (
+      let i = this.state.currentYear - 10;
+      i <= this.state.currentYear + 10;
+      i++
+    ) {
+      years.push(i);
+    }
+    return years;
   };
 
   changeMonth = (delta) => {
