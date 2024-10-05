@@ -3,7 +3,7 @@
     'version': '1.0',
     'category': 'Localization',
     'summary': 'Ethiopian Calendar Integration for Odoo',
-    'author':'Yihune Z.',
+    'author':'Yihune Zewdie',
     'description': """
         This module adds Ethiopian calendar support to Odoo.
         It provides date conversion between Gregorian and Ethiopian calendars
@@ -19,9 +19,9 @@
     ],
     'assets': {
         'web.assets_backend': [
-            'ethiopian_date_picker/static/src/xml/et_date_picker.xml',
-            'ethiopian_date_picker/static/src/js/et_date_picker.js',
             'ethiopian_date_picker/static/src/js/ethiopian_date.js',
+            'ethiopian_date_picker/static/src/js/et_date_picker.js',
+            'ethiopian_date_picker/static/src/xml/et_date_picker.xml',
             'ethiopian_date_picker/static/src/css/ethiopian_calendar.css',
         ],
 

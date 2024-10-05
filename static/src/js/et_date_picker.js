@@ -41,7 +41,7 @@ class DateTimeEthiopiaField extends Component {
       selectedDate: null,
       viewMode: "days",
     });
-    this.inputRef = useRef("input");
+    this.wrapperRef = useRef("wrapper");
 
     onWillStart(async () => {
       this.initializeDate();
@@ -49,6 +49,7 @@ class DateTimeEthiopiaField extends Component {
 
     onMounted(() => {
       this.formatDate();
+      this.setupOutsideClickListener();
     });
 
     useEffect(
@@ -57,6 +58,16 @@ class DateTimeEthiopiaField extends Component {
       },
       () => [this.props.value]
     );
+  }
+
+  setupOutsideClickListener() {
+    const handleOutsideClick = (event) => {
+      if (this.wrapperRef.el && !this.wrapperRef.el.contains(event.target)) {
+        this.state.showCalendar = false;
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
   }
 
   initializeDate = () => {
@@ -159,25 +170,25 @@ class DateTimeEthiopiaField extends Component {
 
   onInputClick = () => {
     this.state.showCalendar = !this.state.showCalendar;
-    this.state.viewMode = "days"; // Reset view mode to days when opening the calendar
+    this.state.viewMode = "days";
   };
 
   onCalendarHeaderClick = () => {
     if (this.state.viewMode === "days") {
-      this.state.viewMode = "months"; // Switch to months view
+      this.state.viewMode = "months";
     } else if (this.state.viewMode === "months") {
-      this.state.viewMode = "years"; // Switch to years view
+      this.state.viewMode = "years";
     }
   };
 
   onMonthSelect = (month) => {
     this.state.currentMonth = this.ETHIOPIAN_MONTHS.indexOf(month);
-    this.state.viewMode = "days"; // Switch back to days view after month selection
+    this.state.viewMode = "days";
   };
 
   onYearSelect = (year) => {
     this.state.currentYear = year;
-    this.state.viewMode = "months"; // Switch back to months view after year selection
+    this.state.viewMode = "months";
   };
 
   getAvailableYears = () => {
@@ -211,8 +222,6 @@ class DateTimeEthiopiaField extends Component {
 
   syncWithOdooField() {
     const odooFieldValue = this.props.value;
-    console.log("odooFieldValue:", odooFieldValue);
-
     if (
       odooFieldValue &&
       (!this.state.selectedDate ||

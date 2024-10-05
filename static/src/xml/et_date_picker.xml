@@ -1,27 +1,29 @@
 <templates xml:space="preserve">
     <t t-name="ethiopian_date_picker.DateTimeEthiopiaField" owl="1">
-        <div class="ethiopian-date-picker">
+        <div class="ethiopian-date-picker" t-ref="wrapper">
             <input
                 type="text"
                 t-att-value="state.inputValue"
-                t-ref="input"
                 t-on-click="onInputClick"
-                t-on-input="onInputChange" 
+                t-on-input="onInputChange"
             />
-            <div t-if="state.showCalendar" class="calendar-popup">
-                        <div class="calendar-header">
-                    <button t-on-click="() => changeMonth(-1)" t-if="state.viewMode === 'days'" class="nav-button">&lt;</button>
-
-                            <span class="current-month-year" t-on-click="onCalendarHeaderClick">
-                                <t t-if="state.viewMode === 'days'">
-                                    <t t-esc="ETHIOPIAN_MONTHS[state.currentMonth]"/> 
-                                    <t t-esc="state.currentYear"/>
-                                </t>
-                                <t t-if="state.viewMode === 'months'">
-                                    <t  t-esc="state.currentYear"/>
-                                </t>
-                            </span>
-                          <button t-on-click="() => changeMonth(1)" t-if="state.viewMode === 'days'" class="nav-button">&gt;</button>
+            <div 
+            t-if="state.showCalendar" 
+            class="calendar-popup"
+            >
+                    <div class="calendar-header">
+                        <button t-on-click="() => changeMonth(-1)" t-if="state.viewMode === 'days'" class="nav-button">&lt;</button>
+                        <span class="current-month-year" t-on-click="onCalendarHeaderClick">
+                            <t t-if="state.viewMode === 'days'">
+                                <t t-esc="ETHIOPIAN_MONTHS[state.currentMonth]"/> 
+                                <t> </t> 
+                                <t t-esc="state.currentYear"/>
+                            </t>
+                            <t t-if="state.viewMode === 'months'">
+                                <t  t-esc="state.currentYear"/>
+                            </t>
+                        </span>
+                        <button t-on-click="() => changeMonth(1)" t-if="state.viewMode === 'days'" class="nav-button">&gt;</button>
  
                 </div>
                 <div class="calendar-body">

@@ -112,3 +112,23 @@
 .year:hover {
   background-color: #e0e0e0;
 }
+.ethiopian-date-picker input {
+  border: none;
+  border-bottom: 2px solid white;
+  padding: 1px;
+  width: 100%;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.ethiopian-date-picker input:focus {
+  border-bottom: 2px solid #ccc;
+  outline: none;
+}
+
+.ethiopian-date-picker input:hover {
+  border-bottom: 2px solid #ccc;
+  outline: none;
+  cursor: pointer;
+}
