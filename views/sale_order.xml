@@ -8,6 +8,7 @@
             <xpath expr="//field[@name='date_order']" position="after">
                 <field name="order_date_et" widget="date_et" string="Order Date (ET)"/>
             </xpath>
+                      
         </field>
     </record>
 </odoo>

@@ -114,10 +114,9 @@
 }
 .ethiopian-date-picker input {
   border: none;
-  border-bottom: 2px solid white;
+  border-bottom: 2px solid #ccc;
   padding: 1px;
   width: 100%;
-  font-size: 16px;
   outline: none;
   transition: border-color 0.3s ease-in-out;
 }
@@ -128,7 +127,6 @@
 }
 
 .ethiopian-date-picker input:hover {
-  border-bottom: 2px solid #ccc;
   outline: none;
   cursor: pointer;
 }

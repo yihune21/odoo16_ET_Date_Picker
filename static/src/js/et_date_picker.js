@@ -77,6 +77,8 @@ class DateTimeEthiopiaField extends Component {
     this.state.currentMonth = ethiopianDate.month - 1;
     this.state.currentDay = ethiopianDate.day;
     this.state.inputValue = ethiopianDate.format();
+
+
   };
 
   formatDate = () => {
@@ -86,19 +88,8 @@ class DateTimeEthiopiaField extends Component {
         const ethiopianDate = EthiopianDate.fromGregorian(date);
         this.state.inputValue = ethiopianDate.format();
         this.state.selectedDate = ethiopianDate;
-      } else {
-        this.resetState();
-      }
-    } else {
-      this.resetState();
-    }
-  };
-
-  resetState = () => {
-    this.state.inputValue = "";
-    this.state.selectedDate = null;
-    this.state.currentYear = new Date().getFullYear();
-    this.state.currentMonth = new Date().getMonth();
+      } 
+    } 
   };
 
   onInputChange = (event) => {
@@ -116,7 +107,7 @@ class DateTimeEthiopiaField extends Component {
       const formattedEthiopianDate = selectedDate.format();
 
       this.state.currentDay = parsedDate.day;
-      this.state.currentMonth = parsedDate.month - 1; // Adjust because JavaScript months are 0-indexed
+      this.state.currentMonth = parsedDate.month - 1;
       this.state.currentYear = parsedDate.year;
       this.state.selectedDate = selectedDate;
 
@@ -222,6 +213,7 @@ class DateTimeEthiopiaField extends Component {
 
   syncWithOdooField() {
     const odooFieldValue = this.props.value;
+    console.log("odooFieldValue", odooFieldValue);
     if (
       odooFieldValue &&
       (!this.state.selectedDate ||
